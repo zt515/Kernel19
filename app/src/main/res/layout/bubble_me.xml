@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="horizontal"
-	android:layout_margin="6dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/bubble_margin"
+    android:clickable="false"
+    android:orientation="horizontal">
 
-	<ImageView
-		android:layout_height="48dp"
-		android:layout_width="48dp"
-		android:src="@drawable/me"
-		android:id="@id/bubble_icon_me"
-		android:layout_marginLeft="6dp"
-		android:layout_marginStart="6dp"
-		android:layout_alignParentRight="true"/>
+    <ImageView
+        android:id="@id/bubble_icon_me"
+        android:layout_width="@dimen/head_icon_size"
+        android:layout_height="@dimen/head_icon_size"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/bubble_margin"
+        android:layout_marginStart="@dimen/bubble_margin"
+        android:src="@drawable/me" />
 
-	<LinearLayout
-		android:layout_toLeftOf="@id/bubble_icon_me"
-		android:layout_alignTop="@id/bubble_icon_me"
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:orientation="vertical"
-		android:minHeight="48dp"
-		android:id="@id/bubble_content_me"
-		android:gravity="right|center_vertical">
+    <LinearLayout
+        android:id="@id/bubble_content_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/bubble_icon_me"
+        android:layout_marginLeft="@dimen/head_icon_size"
+        android:layout_marginStart="@dimen/head_icon_size"
+        android:layout_toLeftOf="@id/bubble_icon_me"
+        android:layout_toStartOf="@id/bubble_icon_me"
+        android:gravity="end|center_vertical"
+        android:minHeight="@dimen/head_icon_size"
+        android:orientation="vertical">
 
-	</LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>
 

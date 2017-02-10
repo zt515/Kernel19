@@ -1,71 +1,81 @@
 package io.kiva.kernel;
 
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.widget.TextView;
-import android.widget.ListView;
-import io.kiva.kernel.chat.MessageHolder;
-import io.kiva.kernel.chat.History;
-import io.kiva.kernel.adapter.MessageAdapter;
-import io.kiva.kernel.chat.Messager;
-import android.view.View.OnClickListener;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
-public class MainActivity extends Activity 
-{
+import io.kiva.kernel.adapter.MessageAdapter;
+import io.kiva.kernel.ai.AIKernel19;
+import io.kiva.kernel.chat.ChatManager;
+import io.kiva.kernel.chat.History;
+import io.kiva.kernel.user.User;
+
+public class MainActivity extends Activity {
     private ListView msgList;
-    private Messager messager;
-    private MessageAdapter adapter;
-    
+    private ChatManager chatManager;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        
-        initTitleText();
+        setContentView(R.layout.activity_main);
+
+        initChat();
         initMessageList();
         initWidget();
     }
 
-    private void initWidget()
-    {
+    private void initChat() {
+        AIKernel19 chatUser = new AIKernel19();
+        initTitleText(chatUser);
+
+        chatManager = new ChatManager(History.loadHistory());
+        chatManager.setChatUser(chatUser);
+    }
+
+    private void initWidget() {
         final EditText input = (EditText) findViewById(R.id.mainInput);
-        
+
         findViewById(R.id.mainSend).setOnClickListener(new OnClickListener() {
 
-                @Override
-                public void onClick(View p1)
-                {
-                    String text = input.getText().toString();
-                    if (!text.isEmpty()) {
-                        input.setText(null);
-                        messager.sendTextMessage(text);
-                        msgList.smoothScrollToPosition(msgList.getCount() - 1);
-                    }
+            @Override
+            public void onClick(View p1) {
+                String text = input.getText().toString();
+                if (!text.isEmpty()) {
+                    input.setText(null);
+                    chatManager.sendTextMessage(text);
+                    msgList.smoothScrollToPosition(msgList.getCount() - 1);
                 }
+            }
         });
     }
 
     private void initMessageList() {
-        messager = new Messager(this, History.loadHistory());
-        adapter = new MessageAdapter(this);
-        messager.attachViewAdapter(adapter);
-        
+        MessageAdapter adapter = new MessageAdapter(this);
+        chatManager.attachViewAdapter(adapter);
+
         msgList = (ListView) findViewById(R.id.msgList);
         msgList.setAdapter(adapter);
     }
-    
-    public void initTitleText() {
+
+    public void initTitleText(User user) {
         try {
-            TextView tv = (TextView) findViewById(R.id.versionText);
-            tv.setText("你好，我是十九，你的私人内核。");
-            // String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-            //tv.setText(version);
+            TextView tv = (TextView) findViewById(R.id.userSignText);
+            tv.setText(user.getSign());
+
+            tv = (TextView) findViewById(R.id.userNameText);
+            tv.setText(user.getName());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        chatManager.onDestroy();
     }
 }

@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="horizontal"
-	android:gravity="left|start"
-	android:layout_margin="6dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_margin="@dimen/bubble_margin"
+    android:clickable="false"
+    android:gravity="start"
+    android:orientation="horizontal">
 
-	<ImageView
-		android:layout_height="48dp"
-		android:layout_width="48dp"
-		android:src="@drawable/ic_launcher"
-		android:id="@id/bubble_icon_other"
-		android:layout_marginRight="6dp"
-		android:layout_marginEnd="6dp"/>
+    <ImageView
+        android:id="@id/bubble_icon_other"
+        android:layout_width="@dimen/head_icon_size"
+        android:layout_height="@dimen/head_icon_size"
+        android:layout_marginEnd="@dimen/bubble_margin"
+        android:layout_marginRight="@dimen/bubble_margin"
+        android:src="@drawable/ic_launcher" />
 
-	<LinearLayout
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:orientation="vertical"
-		android:minHeight="48dp"
-		android:id="@id/bubble_content_other">
+    <LinearLayout
+        android:id="@id/bubble_content_other"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/head_icon_size"
+        android:layout_marginRight="@dimen/head_icon_size"
+        android:minHeight="@dimen/head_icon_size"
+        android:orientation="vertical">
 
-	</LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
 

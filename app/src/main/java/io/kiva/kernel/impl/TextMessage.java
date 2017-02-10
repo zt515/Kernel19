@@ -13,6 +13,11 @@ public class TextMessage extends BaseMessage
         super(MessageType.TYPE_TEXT, from);
     }
 
+    public TextMessage(MessageFrom from, TextMessageData textMessageData) {
+        this(from);
+        setData(textMessageData);
+    }
+
     public void setData(TextMessageData data)
     {
         this.data = data;
