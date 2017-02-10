@@ -50,36 +50,109 @@
     <LinearLayout
         android:id="@+id/mainBottomBar"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="6dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/mainInput"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.8"
-            android:background="@drawable/editor_bg"
-            android:ems="10"
-            android:inputType="textMultiLine"
-            android:maxLines="4"
-            android:paddingEnd="3dp"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:paddingStart="3dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/mainSend"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginStart="4dp"
-            android:layout_weight="0.2"
-            android:text="发送" />
+            <EditText
+                android:id="@+id/mainInput"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:background="@drawable/editor_bg"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:maxLines="4"
+                android:paddingEnd="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:paddingStart="3dp" />
+
+            <Button
+                android:id="@+id/mainSend"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_weight="0.2"
+                android:text="发送" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageButton
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_weight="1.0"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_voice" />
+
+            <ImageButton
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_weight="1.0"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_camera" />
+
+            <ImageButton
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_weight="1.0"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_music" />
+
+            <ImageButton
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_weight="1.0"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_emoticon" />
+
+            <ImageButton
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_weight="1.0"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_settings" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mainBottomPanel"
+            android:layout_width="match_parent"
+            android:layout_height="256dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <GridView
+                android:id="@+id/mainPanelGridView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
     </LinearLayout>
 
