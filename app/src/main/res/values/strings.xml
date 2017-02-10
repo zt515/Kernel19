@@ -3,5 +3,7 @@
 
     <string name="app_name">Kernel19</string>
     <string name="hello_world">Hello world!</string>
-
+    <string name="app_voice" translatable="false">voice</string>
+    <string name="app_music" translatable="false">music</string>
+    <string name="app_emoticon" translatable="false">emoticon</string>
 </resources>

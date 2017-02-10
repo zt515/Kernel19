@@ -1,10 +1,15 @@
 package io.kiva.kernel;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -12,11 +17,36 @@ import io.kiva.kernel.adapter.MessageAdapter;
 import io.kiva.kernel.ai.AIKernel19;
 import io.kiva.kernel.chat.ChatManager;
 import io.kiva.kernel.chat.History;
+import io.kiva.kernel.panel.EmoticonListPanel;
+import io.kiva.kernel.panel.MusicPanel;
+import io.kiva.kernel.panel.PanelManager;
+import io.kiva.kernel.panel.VoicePanel;
 import io.kiva.kernel.user.User;
+import io.kiva.kernel.utils.ImeKit;
+import io.kiva.kernel.utils.UIKit;
 
 public class MainActivity extends Activity {
     private ListView msgList;
     private ChatManager chatManager;
+    private PanelManager panelManager;
+    private EditText input;
+
+    private Runnable showPanelRunnable = new Runnable() {
+        @Override
+        public void run() {
+            panelManager.show();
+        }
+    };
+
+    private OnClickListener panelActionListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String tag = (String) view.getTag();
+            ImeKit.hideIme(MainActivity.this, input);
+            UIKit.get().postDelayed(showPanelRunnable, 250);
+            panelManager.switchToPanel(tag);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +67,44 @@ public class MainActivity extends Activity {
     }
 
     private void initWidget() {
-        final EditText input = (EditText) findViewById(R.id.mainInput);
+        input = (EditText) findViewById(R.id.mainInput);
+        final LinearLayout container = (LinearLayout) findViewById(R.id.mainBottomPanel);
+
+        panelManager = new PanelManager(container);
+        panelManager.addPanel(getString(R.string.app_emoticon), new EmoticonListPanel(chatManager));
+        panelManager.addPanel(getString(R.string.app_music), new MusicPanel());
+        panelManager.addPanel(getString(R.string.app_voice), new VoicePanel());
+
+        findViewById(R.id.mainSendVoice).setOnClickListener(panelActionListener);
+        findViewById(R.id.mainSendEmoticon).setOnClickListener(panelActionListener);
+        findViewById(R.id.mainShareMusic).setOnClickListener(panelActionListener);
+
+        findViewById(R.id.mainSendPhoto).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(camera, 20020823);
+            }
+        });
+
+        input.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                panelManager.dismiss();
+            }
+        });
+
+        ImeKit.listenImeEvent(findViewById(R.id.mainRootLayout), new ImeKit.OnImeChangedListener() {
+            @Override
+            public void onImeChange(boolean open) {
+                int h = ImeKit.getImeHeight();
+                if (h != 0) {
+                    ViewGroup.LayoutParams params = container.getLayoutParams();
+                    params.height = h;
+                    container.setLayoutParams(params);
+                }
+            }
+        });
 
         findViewById(R.id.mainSend).setOnClickListener(new OnClickListener() {
 
@@ -70,6 +137,16 @@ public class MainActivity extends Activity {
             tv.setText(user.getName());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 20020823 && resultCode == Activity.RESULT_OK && null != data) {
+            Bundle bundle = data.getExtras();
+            Bitmap bitmap = (Bitmap) bundle.get("data");
+            chatManager.sendImageMessage(bitmap);
         }
     }
 

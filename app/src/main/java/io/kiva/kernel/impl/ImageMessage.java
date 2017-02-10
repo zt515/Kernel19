@@ -13,6 +13,11 @@ public class ImageMessage extends BaseMessage
         super(MessageType.TYPE_IMAGE, from);
     }
 
+    public ImageMessage(MessageFrom from, ImageMessageData imageMessageData) {
+        super(MessageType.TYPE_IMAGE, from);
+        setData(imageMessageData);
+    }
+
     public void setData(ImageMessageData data)
     {
         this.data = data;

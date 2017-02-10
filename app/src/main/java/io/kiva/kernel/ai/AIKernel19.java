@@ -7,6 +7,7 @@ import io.kiva.kernel.impl.EmoticonMessage;
 import io.kiva.kernel.impl.MessageBuilder;
 import io.kiva.kernel.model.IMessage;
 import io.kiva.kernel.model.MessageFrom;
+import io.kiva.kernel.model.MessageType;
 import io.kiva.kernel.utils.UIKit;
 
 /**
@@ -23,7 +24,7 @@ public class AIKernel19 extends AIUser {
         simulateReply(message);
     }
 
-    private void simulateReply(final IMessage message) {
+    private void simulateReply(IMessage message) {
         final OnReplyListener listener = getReplyListener();
         if (listener == null) {
             return;
@@ -35,15 +36,24 @@ public class AIKernel19 extends AIUser {
             delay += 200;
         }
 
-        final boolean isText = random.nextBoolean() && random.nextBoolean();
+        final MessageType type = message.getType();
+        final boolean isText = random.nextBoolean();
+
         final int emojiId = Math.abs(random.nextInt() % EmoticonMessage.getEmojiCount());
 
         UIKit.get().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (isText) {
-                    listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER,
-                            "十九是傻瓜,十九最讨厌你儿子了,十九想和你玩\n你好可爱."));
+                if (type == MessageType.TYPE_IMAGE) {
+                    listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "十九觉得很好看"));
+                    listener.onNewReply(MessageBuilder.emoticon(MessageFrom.FROM_OTHER,
+                            EmoticonMessage.EMOJI_SURPRISED));
+                } else if (type == MessageType.TYPE_EMOTICON) {
+                    listener.onNewReply(MessageBuilder.emoticon(MessageFrom.FROM_OTHER, emojiId));
+
+                } else if (isText) {
+                    String text = "十九是傻瓜,十九最讨厌你儿子了,十九想和你玩\n你好可爱.";
+                    listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, text));
                 } else {
                     listener.onNewReply(MessageBuilder.emoticon(MessageFrom.FROM_OTHER, emojiId));
                 }

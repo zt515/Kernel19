@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -96,15 +97,18 @@
             android:orientation="horizontal">
 
             <ImageButton
+                android:id="@+id/mainSendVoice"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:layout_weight="1.0"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_voice" />
+                android:src="@drawable/ic_voice"
+                android:tag="@string/app_voice" />
 
             <ImageButton
+                android:id="@+id/mainSendPhoto"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="20dp"
@@ -114,24 +118,29 @@
                 android:src="@drawable/ic_camera" />
 
             <ImageButton
+                android:id="@+id/mainShareMusic"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:layout_weight="1.0"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_music" />
+                android:src="@drawable/ic_music"
+                android:tag="@string/app_music" />
 
             <ImageButton
+                android:id="@+id/mainSendEmoticon"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:layout_weight="1.0"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_emoticon" />
+                android:src="@drawable/ic_emoticon"
+                android:tag="@string/app_emoticon" />
 
             <ImageButton
+                android:id="@+id/mainSettings"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="20dp"
@@ -148,10 +157,6 @@
             android:orientation="horizontal"
             android:visibility="gone">
 
-            <GridView
-                android:id="@+id/mainPanelGridView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
         </LinearLayout>
 
     </LinearLayout>
