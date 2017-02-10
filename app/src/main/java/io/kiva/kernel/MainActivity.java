@@ -151,6 +151,15 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (panelManager.isShowing()) {
+            panelManager.dismiss();
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         chatManager.onDestroy();
