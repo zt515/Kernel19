@@ -59,8 +59,8 @@
       <file leaf-file-name="AIKernel19.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/io/kiva/kernel/ai/AIKernel19.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="39" column="52" selection-start-line="39" selection-start-column="52" selection-end-line="39" selection-end-column="52" />
+            <state relative-caret-position="462">
+              <caret line="61" column="96" selection-start-line="61" selection-start-column="96" selection-end-line="61" selection-end-column="96" />
               <folding />
             </state>
           </provider>
@@ -1638,10 +1638,10 @@
         <option value="$PROJECT_DIR$/app/src/main/java/io/kiva/kernel/impl/MessageBuilder.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/io/kiva/kernel/impl/ImageMessage.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/io/kiva/kernel/chat/ChatManager.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/io/kiva/kernel/ai/AIKernel19.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/emoticon_item.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/io/kiva/kernel/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/io/kiva/kernel/ai/AIKernel19.java" />
       </list>
     </option>
   </component>
@@ -2610,8 +2610,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/io/kiva/kernel/ai/AIKernel19.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="39" column="52" selection-start-line="39" selection-start-column="52" selection-end-line="39" selection-end-column="52" />
+        <state relative-caret-position="462">
+          <caret line="61" column="96" selection-start-line="61" selection-start-column="96" selection-end-line="61" selection-end-column="96" />
           <folding />
         </state>
       </provider>

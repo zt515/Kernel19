@@ -5,6 +5,8 @@ import java.util.Random;
 import io.kiva.kernel.chat.OnReplyListener;
 import io.kiva.kernel.impl.EmoticonMessage;
 import io.kiva.kernel.impl.MessageBuilder;
+import io.kiva.kernel.impl.TextMessage;
+import io.kiva.kernel.impl.TextMessageData;
 import io.kiva.kernel.model.IMessage;
 import io.kiva.kernel.model.MessageFrom;
 import io.kiva.kernel.model.MessageType;
@@ -24,7 +26,7 @@ public class AIKernel19 extends AIUser {
         simulateReply(message);
     }
 
-    private void simulateReply(IMessage message) {
+    private void simulateReply(final IMessage message) {
         final OnReplyListener listener = getReplyListener();
         if (listener == null) {
             return;
@@ -44,6 +46,24 @@ public class AIKernel19 extends AIUser {
         UIKit.get().postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (type == MessageType.TYPE_TEXT) {
+                    TextMessageData data = ((TextMessage) message).getData();
+                    String text = data.getData();
+                    if (text.contains("我爱你")) {
+                        listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "我也爱你！"));
+                        return;
+                    } else if (text.contains("晚安")) {
+                        listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "晚安～"));
+                        return;
+                    } else if (text.contains("睡觉")) {
+                        listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "你睡我就睡 2333"));
+                        return;
+                    } else if (text.contains("19") || text.contains("十九")) {
+                        listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "十九在这里啦！"));
+                        return;
+                    }
+                }
+
                 if (type == MessageType.TYPE_IMAGE) {
                     listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "十九觉得很好看"));
                     listener.onNewReply(MessageBuilder.emoticon(MessageFrom.FROM_OTHER,
@@ -52,7 +72,7 @@ public class AIKernel19 extends AIUser {
                     listener.onNewReply(MessageBuilder.emoticon(MessageFrom.FROM_OTHER, emojiId));
 
                 } else if (isText) {
-                    String text = "十九是傻瓜,十九最讨厌你儿子了,十九想和你玩\n你好可爱.";
+                    String text = "all at sea...";
                     listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, text));
                 } else {
                     listener.onNewReply(MessageBuilder.emoticon(MessageFrom.FROM_OTHER, emojiId));
