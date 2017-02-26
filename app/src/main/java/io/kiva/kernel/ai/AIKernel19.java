@@ -72,7 +72,7 @@ public class AIKernel19 extends AIUser {
                     listener.onNewReply(MessageBuilder.emoticon(MessageFrom.FROM_OTHER, emojiId));
 
                 } else if (isText) {
-                    String text = "all at sea...";
+                    String text = "十九是傻瓜";
                     listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, text));
                 } else {
                     listener.onNewReply(MessageBuilder.emoticon(MessageFrom.FROM_OTHER, emojiId));
