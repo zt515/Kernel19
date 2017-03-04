@@ -11,11 +11,11 @@ import io.kiva.kernel.impl.ImageMessageData;
 import io.kiva.kernel.model.IMessage;
 import io.kiva.kernel.model.MessageFrom;
 
-public class ImageMessageViewHolder extends BubbleViewHolder
+class ImageMessageViewHolder extends BubbleViewHolder
  {
-    protected ImageView image;
+    private ImageView image;
 
-    public ImageMessageViewHolder(Context ctx, int resId, MessageFrom from) {
+    ImageMessageViewHolder(Context ctx, int resId, MessageFrom from) {
         super(ctx, resId, from);
         
         View content = LayoutInflater.from(ctx).inflate(R.layout.image_message, null, false);

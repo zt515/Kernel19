@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Kernel19.iml" filepath="$PROJECT_DIR$/Kernel19.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/twpp/twpp.iml" filepath="$PROJECT_DIR$/twpp/twpp.iml" />
     </modules>
   </component>
 </project>

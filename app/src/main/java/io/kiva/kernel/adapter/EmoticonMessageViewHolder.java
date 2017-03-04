@@ -11,10 +11,10 @@ import io.kiva.kernel.model.IMessage;
 import io.kiva.kernel.impl.EmoticonMessage;
 import io.kiva.kernel.impl.EmoticonMessageData;
 
-public class EmoticonMessageViewHolder extends BubbleViewHolder
+class EmoticonMessageViewHolder extends BubbleViewHolder
 {
     private ImageView image;
-    public EmoticonMessageViewHolder(Context ctx, int resId, MessageFrom from) {
+    EmoticonMessageViewHolder(Context ctx, int resId, MessageFrom from) {
         super(ctx, resId, from);
         View content = LayoutInflater.from(ctx).inflate(R.layout.image_message, null, false);
         image = (ImageView) content.findViewById(R.id.image_message);

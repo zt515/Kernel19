@@ -3,6 +3,7 @@ package io.kiva.kernel.chat;
 import android.graphics.Bitmap;
 
 import io.kiva.kernel.adapter.BaseMessageAdapter;
+import io.kiva.kernel.impl.CodeMessage;
 import io.kiva.kernel.impl.EmoticonMessage;
 import io.kiva.kernel.impl.EmoticonMessageData;
 import io.kiva.kernel.impl.ImageMessage;
@@ -49,6 +50,11 @@ public class ChatManager implements OnReplyListener, OnMessageListener {
 
     public void sendTextMessage(String text) {
         TextMessage m = MessageBuilder.text(MessageFrom.FROM_ME, text);
+        sendMessage(m);
+    }
+
+    public void sendCodeMessage(String code) {
+        CodeMessage m = MessageBuilder.code(MessageFrom.FROM_ME, code);
         sendMessage(m);
     }
 

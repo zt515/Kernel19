@@ -9,9 +9,9 @@ import io.kiva.kernel.model.MessageFrom;
 
 public class ViewHolder
 {
-    public View root;
-    public LinearLayout content;
-    public ImageView icon;
+    private View root;
+    private LinearLayout content;
+    private ImageView icon;
     
     public ViewHolder(View root, MessageFrom from) {
         this.root = root;

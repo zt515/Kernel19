@@ -53,6 +53,8 @@ public class MessageAdapter extends BaseMessageAdapter
                 case TYPE_EMOTICON:
                     vh = new EmoticonMessageViewHolder(context, resId, from);
                     break;
+                case TYPE_CODE:
+                    vh = new CodeMessageViewHolder(context, resId, from);
             }
         }
         

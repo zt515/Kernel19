@@ -85,8 +85,8 @@ public class BaseMessageAdapter extends BaseAdapter
     protected ViewHolder onCreateViewHolder(Context context, MessageType type, MessageFrom from) {
         return null;
     }
-    
-    protected void onBindViewHolder(int position, ViewHolder vh) {
+
+    private void onBindViewHolder(int position, ViewHolder vh) {
         IMessage msg = (IMessage) getItem(position);
         vh.onBind(msg);
     }

@@ -12,11 +12,11 @@ import io.kiva.kernel.model.IMessage;
 import io.kiva.kernel.model.MessageFrom;
 import android.graphics.Color;
 
-public class TextMessageViewHolder extends BubbleViewHolder
+class TextMessageViewHolder extends BubbleViewHolder
 {
     private TextView text;
 
-    public TextMessageViewHolder(Context ctx, int resId, MessageFrom from) {
+    TextMessageViewHolder(Context ctx, int resId, MessageFrom from) {
         super(ctx, resId, from);
         
         View content = LayoutInflater.from(ctx).inflate(R.layout.text_message, null, false);

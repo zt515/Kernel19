@@ -79,44 +79,38 @@ public class MainActivity extends Activity {
         findViewById(R.id.mainSendEmoticon).setOnClickListener(panelActionListener);
         findViewById(R.id.mainShareMusic).setOnClickListener(panelActionListener);
 
-        findViewById(R.id.mainSendPhoto).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(camera, 20020823);
+        findViewById(R.id.mainSendPhoto).setOnClickListener(view -> {
+            Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(camera, 20020823);
+        });
+
+        input.setOnClickListener(view -> panelManager.dismiss());
+
+        ImeKit.listenImeEvent(findViewById(R.id.mainRootLayout), open -> {
+            int h = ImeKit.getImeHeight();
+            if (h != 0) {
+                ViewGroup.LayoutParams params = container.getLayoutParams();
+                params.height = h;
+                container.setLayoutParams(params);
             }
         });
 
-        input.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                panelManager.dismiss();
+        findViewById(R.id.mainSend).setOnClickListener(p1 -> {
+            String text = input.getText().toString();
+            if (text.isEmpty()) {
+                return;
             }
-        });
 
-        ImeKit.listenImeEvent(findViewById(R.id.mainRootLayout), new ImeKit.OnImeChangedListener() {
-            @Override
-            public void onImeChange(boolean open) {
-                int h = ImeKit.getImeHeight();
-                if (h != 0) {
-                    ViewGroup.LayoutParams params = container.getLayoutParams();
-                    params.height = h;
-                    container.setLayoutParams(params);
-                }
+            input.setText(null);
+
+            if (text.startsWith("@")) {
+                String code = text.substring(1).trim();
+                chatManager.sendCodeMessage(code);
+            } else {
+                chatManager.sendTextMessage(text);
             }
-        });
 
-        findViewById(R.id.mainSend).setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View p1) {
-                String text = input.getText().toString();
-                if (!text.isEmpty()) {
-                    input.setText(null);
-                    chatManager.sendTextMessage(text);
-                    msgList.smoothScrollToPosition(msgList.getCount() - 1);
-                }
-            }
+            msgList.smoothScrollToPosition(msgList.getCount() - 1);
         });
     }
 
@@ -163,5 +157,16 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         chatManager.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        panelManager.dismiss();
     }
 }

@@ -2,6 +2,7 @@ package io.kiva.kernel.ai;
 
 import java.util.Random;
 
+import io.kiva.kernel.ai.code.CodeRunner;
 import io.kiva.kernel.chat.OnReplyListener;
 import io.kiva.kernel.impl.EmoticonMessage;
 import io.kiva.kernel.impl.MessageBuilder;
@@ -39,41 +40,39 @@ public class AIKernel19 extends AIUser {
         }
 
         final MessageType type = message.getType();
-        final boolean isText = random.nextBoolean();
+        final boolean randomReplyText = random.nextBoolean();
 
         final int emojiId = Math.abs(random.nextInt() % EmoticonMessage.getEmojiCount());
 
-        UIKit.get().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (type == MessageType.TYPE_TEXT) {
-                    TextMessageData data = ((TextMessage) message).getData();
-                    String text = data.getData();
-                    if (text.contains("我爱你")) {
-                        listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "我也爱你！"));
-                        return;
-                    } else if (text.contains("晚安")) {
-                        listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "晚安～"));
-                        return;
-                    } else if (text.contains("睡觉")) {
-                        listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "你睡我就睡 2333"));
-                        return;
-                    } else if (text.contains("19") || text.contains("十九")) {
-                        listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "十九在这里啦！"));
-                        return;
-                    }
-                }
+        UIKit.get().postDelayed(() -> {
+            if (type == MessageType.TYPE_IMAGE) {
+                listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "十九觉得很好看"));
+                listener.onNewReply(MessageBuilder.emoticon(MessageFrom.FROM_OTHER,
+                        EmoticonMessage.EMOJI_SURPRISED));
 
-                if (type == MessageType.TYPE_IMAGE) {
-                    listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "十九觉得很好看"));
-                    listener.onNewReply(MessageBuilder.emoticon(MessageFrom.FROM_OTHER,
-                            EmoticonMessage.EMOJI_SURPRISED));
-                } else if (type == MessageType.TYPE_EMOTICON) {
-                    listener.onNewReply(MessageBuilder.emoticon(MessageFrom.FROM_OTHER, emojiId));
+            } else if (type == MessageType.TYPE_EMOTICON) {
+                listener.onNewReply(MessageBuilder.emoticon(MessageFrom.FROM_OTHER, emojiId));
 
-                } else if (isText) {
-                    String text = "十九是傻瓜";
-                    listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, text));
+            } else if (type == MessageType.TYPE_CODE) {
+                TextMessageData data = ((TextMessage) message).getData();
+                String code = data.getData();
+                CodeRunner.runCode(code, (output) ->
+                        UIKit.get().post(() ->
+                                listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER,
+                                        "[程序输出]:\n" + output))));
+
+            } else {
+                TextMessageData data = ((TextMessage) message).getData();
+                String text = data.getData();
+
+                if (text.contains("晚安")) {
+                    listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "晚安～"));
+                } else if (text.contains("睡觉")) {
+                    listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "你睡我就睡 2333"));
+                } else if (text.contains("19") || text.contains("十九")) {
+                    listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "十九在这里啦！"));
+                } else if (randomReplyText) {
+                    listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, "十九是傻瓜"));
                 } else {
                     listener.onNewReply(MessageBuilder.emoticon(MessageFrom.FROM_OTHER, emojiId));
                 }
