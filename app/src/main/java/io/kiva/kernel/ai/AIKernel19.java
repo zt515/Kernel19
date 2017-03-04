@@ -1,5 +1,10 @@
 package io.kiva.kernel.ai;
 
+import android.app.AlertDialog;
+import android.content.Context;
+
+import com.dragon.extension.DragonNativeInterface;
+
 import java.util.Random;
 
 import io.kiva.kernel.ai.code.CodeRunner;
@@ -18,13 +23,25 @@ import io.kiva.kernel.utils.UIKit;
  */
 
 public class AIKernel19 extends AIUser {
-    public AIKernel19() {
+    public static final String DEFAULT_INIT_CODE = "";
+
+    private Context context;
+    private String initCode;
+    private Object[] nativeInterfaces;
+
+    public AIKernel19(Context context) {
         super("Kernel.19", "你好，我是十九，你的私人内核。");
+        this.context = context;
+        nativeInterfaces = new Object[]{new Kernel19Interface()};
     }
 
     @Override
     public void onNewMessage(IMessage message) {
         simulateReply(message);
+    }
+
+    public void setInitCode(String initCode) {
+        this.initCode = initCode;
     }
 
     private void simulateReply(final IMessage message) {
@@ -56,10 +73,12 @@ public class AIKernel19 extends AIUser {
             } else if (type == MessageType.TYPE_CODE) {
                 TextMessageData data = ((TextMessage) message).getData();
                 String code = data.getData();
-                CodeRunner.runCode(code, (output) ->
-                        UIKit.get().post(() ->
-                                listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER,
-                                        "[程序输出]:\n" + output))));
+                CodeRunner.runCode(initCode, code, nativeInterfaces, (output) ->
+                        UIKit.get().post(() -> {
+                            if (!output.isEmpty()) {
+                                listener.onNewReply(MessageBuilder.text(MessageFrom.FROM_OTHER, output));
+                            }
+                        }));
 
             } else {
                 TextMessageData data = ((TextMessage) message).getData();
@@ -78,5 +97,16 @@ public class AIKernel19 extends AIUser {
                 }
             }
         }, delay);
+    }
+
+    private class Kernel19Interface {
+        @DragonNativeInterface
+        public void showDialog(String title, String content) {
+            UIKit.get().post(() -> new AlertDialog.Builder(context)
+                    .setTitle(title)
+                    .setMessage(content)
+                    .setPositiveButton(android.R.string.yes, null)
+                    .show());
+        }
     }
 }

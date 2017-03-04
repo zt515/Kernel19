@@ -1,7 +1,9 @@
 package io.kiva.kernel;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.twpp.text.IEditor;
+
 import io.kiva.kernel.adapter.MessageAdapter;
 import io.kiva.kernel.ai.AIKernel19;
 import io.kiva.kernel.chat.ChatManager;
@@ -22,6 +26,7 @@ import io.kiva.kernel.panel.MusicPanel;
 import io.kiva.kernel.panel.PanelManager;
 import io.kiva.kernel.panel.VoicePanel;
 import io.kiva.kernel.user.User;
+import io.kiva.kernel.utils.EditorKit;
 import io.kiva.kernel.utils.ImeKit;
 import io.kiva.kernel.utils.UIKit;
 
@@ -30,6 +35,10 @@ public class MainActivity extends Activity {
     private ChatManager chatManager;
     private PanelManager panelManager;
     private EditText input;
+
+    private AIKernel19 kernel19;
+    private String initCode;
+    private SharedPreferences sharedPreferences;
 
     private Runnable showPanelRunnable = new Runnable() {
         @Override
@@ -59,11 +68,15 @@ public class MainActivity extends Activity {
     }
 
     private void initChat() {
-        AIKernel19 chatUser = new AIKernel19();
-        initTitleText(chatUser);
+        kernel19 = new AIKernel19(this);
+        initTitleText(kernel19);
 
         chatManager = new ChatManager(History.loadHistory());
-        chatManager.setChatUser(chatUser);
+        chatManager.setChatUser(kernel19);
+
+        sharedPreferences = getSharedPreferences("ai", MODE_PRIVATE);
+        initCode = sharedPreferences.getString("initCode", AIKernel19.DEFAULT_INIT_CODE);
+        kernel19.setInitCode(initCode);
     }
 
     private void initWidget() {
@@ -78,7 +91,21 @@ public class MainActivity extends Activity {
         findViewById(R.id.mainSendVoice).setOnClickListener(panelActionListener);
         findViewById(R.id.mainSendEmoticon).setOnClickListener(panelActionListener);
         findViewById(R.id.mainShareMusic).setOnClickListener(panelActionListener);
+        findViewById(R.id.mainSettings).setOnClickListener(view -> {
+            IEditor editor = EditorKit.createEditor(MainActivity.this);
+            editor.setText(initCode);
 
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("编辑运行环境")
+                    .setView(editor.getEditView())
+                    .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+                        initCode = editor.getText();
+                        sharedPreferences.edit().putString("initCode", initCode).apply();
+                        kernel19.setInitCode(initCode);
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
+        });
         findViewById(R.id.mainSendPhoto).setOnClickListener(view -> {
             Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(camera, 20020823);

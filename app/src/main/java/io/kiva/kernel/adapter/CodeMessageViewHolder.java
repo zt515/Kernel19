@@ -18,6 +18,7 @@ import io.kiva.kernel.impl.CodeMessage;
 import io.kiva.kernel.impl.TextMessageData;
 import io.kiva.kernel.model.IMessage;
 import io.kiva.kernel.model.MessageFrom;
+import io.kiva.kernel.utils.EditorKit;
 
 class CodeMessageViewHolder extends BubbleViewHolder {
     private IEditor editor;
@@ -33,15 +34,10 @@ class CodeMessageViewHolder extends BubbleViewHolder {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        editor = new EditorFactory().createEditor(context);
-        editor.setSkin(LightSkin.getInstance());
-        editor.setTabSpaces(4);
-        editor.setLanguage(JavaLang.getDefault());
-        editor.setTextSize(30f);
-        editor.setEditable(false);
-        editor.setTypeface(Typeface.MONOSPACE);
-        container.addView(editor.getEditView());
+        editor = EditorKit.createEditor(context);
+        editor.switchToViewMode();
 
+        container.addView(editor.getEditView());
         getContent().addView(content, layoutParams);
     }
 

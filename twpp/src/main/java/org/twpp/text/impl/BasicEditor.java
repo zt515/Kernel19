@@ -240,4 +240,19 @@ public class BasicEditor implements IEditor {
     public void setTypeface(Typeface typeface) {
         editWidget.setTypeface(typeface);
     }
+
+    @Override
+    public void setHighlightCurrentLine(boolean is) {
+        editWidget.setHighlightCurrentLine(is);
+    }
+
+    @Override
+    public void switchToEditMode() {
+        editWidget.setToEditMode();
+    }
+
+    @Override
+    public void switchToViewMode() {
+        editWidget.setToViewMode();
+    }
 }

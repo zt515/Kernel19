@@ -97,4 +97,10 @@ public interface IEditor {
     Skin getSkin();
 
     void setTypeface(Typeface typeface);
+
+    void setHighlightCurrentLine(boolean is);
+
+    void switchToEditMode();
+
+    void switchToViewMode();
 }

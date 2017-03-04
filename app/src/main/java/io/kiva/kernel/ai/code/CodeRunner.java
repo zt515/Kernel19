@@ -1,14 +1,11 @@
 package io.kiva.kernel.ai.code;
 
-import com.dragon.interpreter.DragonBuiltinInterface;
+import com.dragon.extension.DragonNativeMethod;
 import com.dragon.interpreter.DragonInterpreter;
-import com.dragon.lang.ast.EvalError;
-import com.dragon.lang.io.SystemIOBridge;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -21,8 +18,7 @@ public class CodeRunner {
         return new DragonInterpreter();
     }
 
-
-    public static void runCode(String code, CodeResultCallback callback) {
+    public static void runCode(String init, String code, Object[] nativeInterfaces, CodeResultCallback callback) {
         DragonInterpreter interpreter = newInterpreter();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -32,7 +28,13 @@ public class CodeRunner {
         interpreter.setErr(out);
 
         try {
-            interpreter.eval(code);
+            if (nativeInterfaces != null) {
+                for (Object nativeInterface : nativeInterfaces) {
+                    interpreter.linkNativeMethod(DragonNativeMethod.wrapJavaMethod(nativeInterface));
+                }
+            }
+
+            interpreter.eval((init == null ? "" : init + ";\n") + code);
         } catch (Throwable throwable) {
             throwable.printStackTrace(out);
         } finally {
