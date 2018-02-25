@@ -3,7 +3,10 @@ package io.kiva.kernel.ai;
 import android.app.AlertDialog;
 import android.content.Context;
 
-import com.dragon.extension.DragonNativeInterface;
+import com.krine.extension.IKrineLinkable;
+import com.krine.extension.annotations.ExtensionConfig;
+import com.krine.extension.annotations.KrineMethod;
+import com.krine.interpreter.KrineInterpreter;
 
 import java.util.Random;
 
@@ -27,12 +30,12 @@ public class AIKernel19 extends AIUser {
 
     private Context context;
     private String initCode;
-    private Object[] nativeInterfaces;
+    private Class[] nativeInterfaces;
 
     public AIKernel19(Context context) {
         super("Kernel.19", "你好，我是十九，你的私人内核。");
         this.context = context;
-        nativeInterfaces = new Object[]{new Kernel19Interface()};
+        nativeInterfaces = new Class[]{Kernel19Module.class};
     }
 
     @Override
@@ -99,14 +102,22 @@ public class AIKernel19 extends AIUser {
         }, delay);
     }
 
-    private class Kernel19Interface {
-        @DragonNativeInterface
+    @ExtensionConfig
+    public class Kernel19Module implements IKrineLinkable {
+        public Kernel19Module() {
+        }
+
+        @KrineMethod
         public void showDialog(String title, String content) {
             UIKit.get().post(() -> new AlertDialog.Builder(context)
                     .setTitle(title)
                     .setMessage(content)
                     .setPositiveButton(android.R.string.yes, null)
                     .show());
+        }
+
+        @Override
+        public void bindInterpreter(KrineInterpreter krineInterpreter) {
         }
     }
 }

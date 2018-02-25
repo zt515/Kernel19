@@ -20,4 +20,9 @@ public class ImageMessageData extends MessageData
     {
         return data;
     }
+
+    @Override
+    public String toString() {
+        return "[暂不支持图片消息传输]";
+    }
 }

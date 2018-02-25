@@ -41,7 +41,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('src/main/libs/libdragon.jar')
+    compile files('src/main/libs/Krine.jar')
     compile project(':twpp')
 }
 

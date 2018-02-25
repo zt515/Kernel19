@@ -18,7 +18,7 @@ public class MessageBuilder {
     }
 
     public static EmoticonMessage emoticon(MessageFrom from, int emojiId) {
-        return new EmoticonMessage(from, new EmoticonMessageData(EmoticonMessage.getEmoji(emojiId)));
+        return new EmoticonMessage(from, new EmoticonMessageData(emojiId));
     }
 
     public static ImageMessage image(MessageFrom from, Bitmap image) {

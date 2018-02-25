@@ -96,7 +96,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="libdragon" level="project" />
+    <orderEntry type="library" exported="" name="Krine" level="project" />
     <orderEntry type="module" module-name="twpp" exported="" />
   </component>
 </module>

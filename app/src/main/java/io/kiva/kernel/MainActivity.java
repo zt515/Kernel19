@@ -17,10 +17,14 @@ import android.widget.TextView;
 
 import org.twpp.text.IEditor;
 
+import java.io.IOException;
+
+import cc.kernel19.wetalk.WetalkClient;
 import io.kiva.kernel.adapter.MessageAdapter;
 import io.kiva.kernel.ai.AIKernel19;
 import io.kiva.kernel.chat.ChatManager;
 import io.kiva.kernel.chat.History;
+import io.kiva.kernel.model.MessageFrom;
 import io.kiva.kernel.panel.EmoticonListPanel;
 import io.kiva.kernel.panel.MusicPanel;
 import io.kiva.kernel.panel.PanelManager;
@@ -29,6 +33,8 @@ import io.kiva.kernel.user.User;
 import io.kiva.kernel.utils.EditorKit;
 import io.kiva.kernel.utils.ImeKit;
 import io.kiva.kernel.utils.UIKit;
+import io.kiva.kernel.wetalk.WetalkDataConverter;
+import io.kiva.kernel.wetalk.WetalkUser;
 
 public class MainActivity extends Activity {
     private ListView msgList;
@@ -36,8 +42,9 @@ public class MainActivity extends Activity {
     private PanelManager panelManager;
     private EditText input;
 
-    private AIKernel19 kernel19;
+    private User chatUser;
     private String initCode;
+    private WetalkClient wetalkClient;
     private SharedPreferences sharedPreferences;
 
     private Runnable showPanelRunnable = new Runnable() {
@@ -62,13 +69,42 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initChat();
+        initOnlineChat();
         initMessageList();
         initWidget();
     }
 
-    private void initChat() {
-        kernel19 = new AIKernel19(this);
+    private void initOnlineChat() {
+        WetalkUser user = new WetalkUser(this, (message -> {
+            if (wetalkClient != null) {
+                wetalkClient.sendText(WetalkDataConverter.convertToText(message));
+            }
+        }));
+        initTitleText(user);
+
+        this.chatUser = user;
+        this.wetalkClient = new WetalkClient(2);
+        this.chatManager = new ChatManager(History.loadHistory());
+        this.chatManager.setChatUser(user);
+
+        new Thread(() -> {
+            try {
+                wetalkClient.connect();
+                wetalkClient.start(data
+                        -> UIKit.get().post(()
+                        -> user.getReplyListener()
+                        .onNewReply(WetalkDataConverter.convertToMessage(MessageFrom.FROM_OTHER, data))));
+            } catch (Throwable e) {
+                e.printStackTrace(System.err);
+            }
+        }).start();
+
+    }
+
+    private void initOfflineChat() {
+        AIKernel19 kernel19 = new AIKernel19(this);
+        this.chatUser = kernel19;
+
         initTitleText(kernel19);
 
         chatManager = new ChatManager(History.loadHistory());
@@ -101,7 +137,9 @@ public class MainActivity extends Activity {
                     .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
                         initCode = editor.getText();
                         sharedPreferences.edit().putString("initCode", initCode).apply();
-                        kernel19.setInitCode(initCode);
+                        if (chatUser instanceof AIKernel19) {
+                            ((AIKernel19) chatUser).setInitCode(initCode);
+                        }
                     })
                     .setNegativeButton(android.R.string.no, null)
                     .show();
@@ -149,7 +187,7 @@ public class MainActivity extends Activity {
         msgList.setAdapter(adapter);
     }
 
-    public void initTitleText(User user) {
+    public void initTitleText(io.kiva.kernel.user.User user) {
         try {
             TextView tv = (TextView) findViewById(R.id.userSignText);
             tv.setText(user.getSign());
@@ -183,6 +221,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (wetalkClient != null) {
+            wetalkClient.close();
+        }
         chatManager.onDestroy();
     }
 

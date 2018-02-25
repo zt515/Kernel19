@@ -73,6 +73,10 @@ public class ChatManager implements OnReplyListener, OnMessageListener {
         addMessageList(reply);
     }
 
+    /**
+     * Used in EmoticonListPanel
+     * @param message
+     */
     @Override
     public void onNewMessage(IMessage message) {
         sendMessage(message);

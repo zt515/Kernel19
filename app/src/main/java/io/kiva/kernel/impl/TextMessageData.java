@@ -19,4 +19,9 @@ public class TextMessageData extends MessageData
     {
         return data;
     }
+
+    @Override
+    public String toString() {
+        return getData();
+    }
 }

@@ -1,7 +1,8 @@
 package io.kiva.kernel.ai.code;
 
-import com.dragon.extension.DragonNativeMethod;
-import com.dragon.interpreter.DragonInterpreter;
+import com.krine.extension.IKrineLinkable;
+import com.krine.extension.KrineExtension;
+import com.krine.interpreter.KrineInterpreter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,12 +15,12 @@ import java.io.UnsupportedEncodingException;
 
 public class CodeRunner {
 
-    private static DragonInterpreter newInterpreter() {
-        return new DragonInterpreter();
+    private static KrineInterpreter newInterpreter() {
+        return new KrineInterpreter();
     }
 
-    public static void runCode(String init, String code, Object[] nativeInterfaces, CodeResultCallback callback) {
-        DragonInterpreter interpreter = newInterpreter();
+    public static void runCode(String init, String code, Class<? extends IKrineLinkable>[] nativeInterfaces, CodeResultCallback callback) {
+        KrineInterpreter interpreter = newInterpreter();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream out = new PrintStream(outputStream);
@@ -29,8 +30,8 @@ public class CodeRunner {
 
         try {
             if (nativeInterfaces != null) {
-                for (Object nativeInterface : nativeInterfaces) {
-                    interpreter.linkNativeMethod(DragonNativeMethod.wrapJavaMethod(nativeInterface));
+                for (Class<? extends IKrineLinkable> nativeInterface : nativeInterfaces) {
+                    interpreter.linkNativeInterface(KrineExtension.fromClass(nativeInterface));
                 }
             }
 
